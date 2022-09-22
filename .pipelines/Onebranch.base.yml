@@ -1,31 +1,99 @@
-stages:
-- stage: docker
-  dependsOn: build
-  jobs:
-  - job: linuxContainers # build linux images
-    variables:
-      ob_git_checkout: true
-    pool:
-      type: docker
-      os: linux
-    steps:
-      - task: DownloadPipelineArtifact@2
-        displayName: 'Download Artifacts'
-        inputs:
-          artifact: 'drop linux_phase'
-          targetPath: '$(Build.SourcesDirectory)/dst/drop' 
+#################################################################################
+#   Onebranch Pipelines - Official MSBuild (CDPXMigrated)                       #
+# This pipeline was created by EasyStart from a sample located at:              #
+#   https://aka.ms/obpipelines/easystart/samples                                #
+# Documentation:  https://aka.ms/obpipelines                                    #
+# Yaml Schema:    https://aka.ms/obpipelines/yaml/schema                        #
+# Retail Tasks:   https://aka.ms/obpipelines/tasks                              #
+# Support:        https://aka.ms/onebranchsup                                   #
+#################################################################################
 
-      - task: onebranch.pipeline.imagebuildinfo@1
-        displayName: 'Base image'
-        inputs:
-          repositoryName: azure/cloudshell
-          dockerFileRelPath: drop/linux/base.Dockerfile
-          dockerFileContextPath: drop/linux
-          registry: cdpxlinux.azurecr.io
-          ameregistry: cdpxlinuxame.azurecr.io
-          build_tag: '$(Build.BuildNumber)'
-          compression: true
-          enable_isolated_acr_push: true
-          enable_service_tree_acr_path: true
-          enable_network: true
-          enable_hyperv: true
+trigger: none # https://aka.ms/obpipelines/triggers
+
+parameters: # parameters are shown up in ADO UI in a build queue time
+- name: 'debug'
+  displayName: 'Enable debug output'
+  type: boolean
+  default: false
+
+variables:
+  CDP_LOCKDOWN_NETWORK_FEATURE_ENABLED: true
+  CDPX_DEFINITION_TEMPLATE_VERSION: 1.0.0  
+  system.debug: ${{ parameters.debug }}
+  ENABLE_PRS_DELAYSIGN: 1
+  ROOT: $(Build.SourcesDirectory)
+  REPOROOT: $(Build.SourcesDirectory)
+  OUTPUTROOT: $(REPOROOT)\out
+  NUGET_XMLDOC_MODE: none
+  CDP_DEFINITION_BUILD_COUNT_DAY: $[counter(format('{0:yyyyMMdd}', pipeline.startTime), 1)]
+
+  DisableDockerDetector: true
+  WindowsContainerImage: 'cdpxwin1809.azurecr.io/global/vse2019:latest' # Docker image which is used to build the project https://aka.ms/obpipelines/containers
+#  WindowsContainerImage: 'cdpxwin1809.azurecr.io/global/vse2017:latest' 
+  LinuxContainerImage: 'cdpxlinux.azurecr.io/global/ubuntu-1804-all:4.0'
+
+resources:
+  repositories: 
+    - repository: templates
+      type: git
+      name: OneBranch.Pipelines/GovernedTemplates
+      ref: refs/heads/main
+
+extends:
+  template: v2/OneBranch.Official.CrossPlat.yml@templates # https://aka.ms/obpipelines/templates
+  parameters:
+    cloudvault: # https://aka.ms/obpipelines/cloudvault
+      enabled: true
+      runmode: stage
+      uploadToPipelineArtifacts: true
+      dependsOn:
+        - Docker
+      artifacts: 
+        - drop_Docker_Docker_base
+      generate_default_cvrp: false
+      generate_additional_cvrp: false
+
+    globalSdl: # https://aka.ms/obpipelines/sdl
+      tsa:
+        enabled: false # onebranch publish all sdl results to TSA. If TSA is disabled all SDL tools will forced into 'break' build mode.
+      # credscan:
+      #   suppressionsFile: $(Build.SourcesDirectory)\.config\CredScanSuppressions.json
+      binskim:
+        break: false # always break the build on binskim issues in addition to TSA upload
+      policheck:
+        break: false # always break the build on policheck issues. You can disable it by setting to 'false'
+#       baseline:
+#         baselineFile: $(Build.SourcesDirectory)\.gdn\.gdnbaselines
+      cg:
+        failOnAlert: false  
+    stages:
+    - stage: docker
+      dependsOn: build
+      jobs:
+      - job: linuxContainers # build linux images
+        variables:
+          ob_git_checkout: true
+        pool:
+          type: docker
+          os: linux
+        steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download Artifacts'
+            inputs:
+              artifact: 'drop linux_phase'
+              targetPath: '$(Build.SourcesDirectory)/dst/drop' 
+
+          - task: onebranch.pipeline.imagebuildinfo@1
+            displayName: 'Base image'
+            inputs:
+              repositoryName: azure/cloudshell
+              dockerFileRelPath: drop/linux/base.Dockerfile
+              dockerFileContextPath: drop/linux
+              registry: cdpxlinux.azurecr.io
+              ameregistry: cdpxlinuxame.azurecr.io
+              build_tag: '$(Build.BuildNumber)'
+              compression: true
+              enable_isolated_acr_push: true
+              enable_service_tree_acr_path: true
+              enable_network: true
+              enable_hyperv: true
