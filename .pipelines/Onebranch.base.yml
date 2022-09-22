@@ -68,7 +68,6 @@ extends:
         failOnAlert: false  
     stages:
     - stage: docker
-      dependsOn: build
       jobs:
       - job: linuxContainers # build linux images
         variables:
