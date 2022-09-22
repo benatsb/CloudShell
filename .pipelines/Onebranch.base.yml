@@ -1,0 +1,31 @@
+stages:
+- stage: docker
+  dependsOn: build
+  jobs:
+  - job: linuxContainers # build linux images
+    variables:
+      ob_git_checkout: true
+    pool:
+      type: docker
+      os: linux
+    steps:
+      - task: DownloadPipelineArtifact@2
+        displayName: 'Download Artifacts'
+        inputs:
+          artifact: 'drop linux_phase'
+          targetPath: '$(Build.SourcesDirectory)/dst/drop' 
+
+      - task: onebranch.pipeline.imagebuildinfo@1
+        displayName: 'Base image'
+        inputs:
+          repositoryName: azure/cloudshell
+          dockerFileRelPath: drop/linux/base.Dockerfile
+          dockerFileContextPath: drop/linux
+          registry: cdpxlinux.azurecr.io
+          ameregistry: cdpxlinuxame.azurecr.io
+          build_tag: '$(Build.BuildNumber)'
+          compression: true
+          enable_isolated_acr_push: true
+          enable_service_tree_acr_path: true
+          enable_network: true
+          enable_hyperv: true
