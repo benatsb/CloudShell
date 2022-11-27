@@ -1,0 +1,64 @@
+trigger: none # https://aka.ms/obpipelines/triggers
+
+parameters: # parameters are shown up in ADO UI in a build queue time
+- name: 'debug'
+  displayName: 'Enable debug output'
+  type: boolean
+  default: false
+
+variables:
+  CDP_LOCKDOWN_NETWORK_FEATURE_ENABLED: true
+  CDPX_DEFINITION_TEMPLATE_VERSION: 1.0.0  
+  system.debug: ${{ parameters.debug }}
+  ENABLE_PRS_DELAYSIGN: 1
+  ROOT: $(Build.SourcesDirectory)
+  REPOROOT: $(Build.SourcesDirectory)
+  OUTPUTROOT: $(REPOROOT)\out
+  NUGET_XMLDOC_MODE: none
+  CDP_DEFINITION_BUILD_COUNT_DAY: $[counter(format('{0:yyyyMMdd}', pipeline.startTime), 1)]
+  LinuxContainerImage: 'cdpxlinux.azurecr.io/global/ubuntu-1804-all:4.0'
+
+resources:
+  repositories: 
+    - repository: templates
+      type: git
+      name: OneBranch.Pipelines/GovernedTemplates
+      ref: refs/heads/main
+
+extends:
+  template: v2/OneBranch.Official.CrossPlat.yml@templates # https://aka.ms/obpipelines/templates
+  parameters:
+    globalSdl: # https://aka.ms/obpipelines/sdl
+      tsa:
+        enabled: false # onebranch publish all sdl results to TSA. If TSA is disabled all SDL tools will forced into 'break' build mode.
+      binskim:
+        break: false # always break the build on binskim issues in addition to TSA upload
+      policheck:
+        break: false # always break the build on policheck issues. You can disable it by setting to 'false'
+      cg:
+        failOnAlert: false  
+        
+    stages:
+    - stage: docker
+      jobs:
+      - job: linuxContainers # build linux images
+        variables:
+          ob_git_checkout: true
+        pool:
+          type: docker
+          os: linux
+        steps:
+          - task: onebranch.pipeline.imagebuildinfo@1
+            displayName: 'Tools image'
+            inputs:
+              repositoryName: azure/cloudshell
+              dockerFileRelPath: linux/tools.Dockerfile
+              dockerFileContextPath: /
+              registry: cdpxlinux.azurecr.io
+              ameregistry: cdpxlinuxame.azurecr.io
+              build_tag: 'tools.$(Build.BuildNumber)'
+              compression: true
+              enable_isolated_acr_push: true
+              enable_service_tree_acr_path: true
+              enable_network: true
+              enable_hyperv: true
