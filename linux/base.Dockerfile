@@ -27,208 +27,208 @@ RUN bash ./tdnfinstall.sh \
 RUN bash ./tdnfinstall.sh \
   nodejs
 
-ENV NPM_CONFIG_LOGLEVEL warn
-ENV NODE_VERSION 16.17.1
-ENV NODE_ENV production
-ENV NODE_OPTIONS=--tls-cipher-list='ECDHE-RSA-AES128-GCM-SHA256:!RC4'
+# ENV NPM_CONFIG_LOGLEVEL warn
+# ENV NODE_VERSION 16.17.1
+# ENV NODE_ENV production
+# ENV NODE_OPTIONS=--tls-cipher-list='ECDHE-RSA-AES128-GCM-SHA256:!RC4'
 
-RUN bash ./tdnfinstall.sh \
-  curl \
-  xz \
-  git \
-  gpgme \
-  gnupg2 \
-  autoconf \
-  ansible \
-  bash-completion \
-  build-essential \
-  binutils \
-  ca-certificates \
-  ca-certificates-legacy \
-  chkconfig \
-  cifs-utils \
-  curl \
-  bind-utils \
-  dos2unix \
-  dotnet-runtime-6.0 \
-  dotnet-sdk-6.0 \
-  e2fsprogs \
-  emacs \
-  gawk \
-  glibc-lang \
-  glibc-i18n \
-  grep \
-  gzip \
-  initscripts \
-  iptables \
-  iputils \
-  msopenjdk-11 \
-  jq \
-  less \
-  libffi \
-  libffi-devel \
-  libtool \
-  lz4 \
-  openssl \
-  openssl-libs \
-  openssl-devel \
-  man-db \
-  moby-cli \
-  moby-engine \
-  msodbcsql17 \
-  mssql-tools \
-  mysql \
-  nano \
-  net-tools \
-  parallel \
-  patch \
-  pkg-config \
-  postgresql-libs \
-  postgresql \
-  powershell \
-  python3 \
-  python3-pip \
-  python3-virtualenv \
-  python3-libs \
-  python3-devel \
-  puppet \
-  rpm \
-  rsync \
-  sed \
-  sudo \
-  tar \
-  tmux \
-  unixODBC \
-  unzip \
-  util-linux \
-  vim \
-  wget \
-  which \
-  zip \
-  zsh \
-  maven \
-  jx \
-  cf-cli \
-  golang \
-  ruby \
-  rubygems \
-  packer \
-  dcos-cli \
-  ripgrep \
-  helm \
-  azcopy \
-  apparmor-parser \
-  apparmor-utils \
-  cronie \
-  ebtables-legacy \
-  fakeroot \
-  file \
-  lsb-release \
-  ncompress \
-  pigz \
-  psmisc \
-  procps \
-  shared-mime-info \
-  sysstat \
-  xauth \
-  screen \
-  postgresql-devel \
-  terraform \
-  gh
+# RUN bash ./tdnfinstall.sh \
+#   curl \
+#   xz \
+#   git \
+#   gpgme \
+#   gnupg2 \
+#   autoconf \
+#   ansible \
+#   bash-completion \
+#   build-essential \
+#   binutils \
+#   ca-certificates \
+#   ca-certificates-legacy \
+#   chkconfig \
+#   cifs-utils \
+#   curl \
+#   bind-utils \
+#   dos2unix \
+#   dotnet-runtime-6.0 \
+#   dotnet-sdk-6.0 \
+#   e2fsprogs \
+#   emacs \
+#   gawk \
+#   glibc-lang \
+#   glibc-i18n \
+#   grep \
+#   gzip \
+#   initscripts \
+#   iptables \
+#   iputils \
+#   msopenjdk-11 \
+#   jq \
+#   less \
+#   libffi \
+#   libffi-devel \
+#   libtool \
+#   lz4 \
+#   openssl \
+#   openssl-libs \
+#   openssl-devel \
+#   man-db \
+#   moby-cli \
+#   moby-engine \
+#   msodbcsql17 \
+#   mssql-tools \
+#   mysql \
+#   nano \
+#   net-tools \
+#   parallel \
+#   patch \
+#   pkg-config \
+#   postgresql-libs \
+#   postgresql \
+#   powershell \
+#   python3 \
+#   python3-pip \
+#   python3-virtualenv \
+#   python3-libs \
+#   python3-devel \
+#   puppet \
+#   rpm \
+#   rsync \
+#   sed \
+#   sudo \
+#   tar \
+#   tmux \
+#   unixODBC \
+#   unzip \
+#   util-linux \
+#   vim \
+#   wget \
+#   which \
+#   zip \
+#   zsh \
+#   maven \
+#   jx \
+#   cf-cli \
+#   golang \
+#   ruby \
+#   rubygems \
+#   packer \
+#   dcos-cli \
+#   ripgrep \
+#   helm \
+#   azcopy \
+#   apparmor-parser \
+#   apparmor-utils \
+#   cronie \
+#   ebtables-legacy \
+#   fakeroot \
+#   file \
+#   lsb-release \
+#   ncompress \
+#   pigz \
+#   psmisc \
+#   procps \
+#   shared-mime-info \
+#   sysstat \
+#   xauth \
+#   screen \
+#   postgresql-devel \
+#   terraform \
+#   gh
 
-# Install azure-functions-core-tools
-RUN wget -nv -O Azure.Functions.Cli.linux-x64.4.0.3971.zip https://github.com/Azure/azure-functions-core-tools/releases/download/4.0.3971/Azure.Functions.Cli.linux-x64.4.0.3971.zip \
-  && unzip -d azure-functions-cli Azure.Functions.Cli.linux-x64.4.0.3971.zip \
-  && chmod +x azure-functions-cli/func \
-  && chmod +x azure-functions-cli/gozip \
-  && mv azure-functions-cli /opt \
-  && ln -sf /opt/azure-functions-cli/func /usr/bin/func \
-  && ln -sf /opt/azure-functions-cli/gozip /usr/bin/gozip \
-  && rm -r Azure.Functions.Cli.linux-x64.4.0.3971.zip
-
-
-# Setup locale to en_US.utf8
-RUN echo en_US UTF-8 >> /etc/locale.conf && locale-gen.sh
-ENV LANG="en_US.utf8"
-
-# Update pip and Install Service Fabric CLI
-# Install mssql-scripter
-RUN pip3 install --upgrade sfctl \
-  && pip3 install --upgrade mssql-scripter
-
-# Install Blobxfer and Batch-Shipyard in isolated virtualenvs
-COPY ./linux/blobxfer /usr/local/bin
-RUN chmod 755 /usr/local/bin/blobxfer \
-  && pip3 install virtualenv \
-  && cd /opt \
-  && virtualenv -p python3 blobxfer \
-  && /bin/bash -c "source blobxfer/bin/activate && pip3 install blobxfer && deactivate"
-
-# Mariner distro required patch
-# mariner-batch-shipyard.patch
-# python3 is default in CBL-Mariner
-# Some hacks to install.sh install-tweaked.sh
-RUN curl -fSsL `curl -fSsL https://api.github.com/repos/Azure/batch-shipyard/releases/latest | grep tarball_url | cut -d'"' -f4` | tar -zxvpf - \
-  && mkdir /opt/batch-shipyard \
-  && mv Azure-batch-shipyard-*/* /opt/batch-shipyard \
-  && rm -r Azure-batch-shipyard-* \
-  && cd /opt/batch-shipyard \
-  && sed 's/rhel/mariner/' < install.sh > install-tweaked.sh \
-  && sed -i '/$PYTHON == /s/".*"/"python3"/' install-tweaked.sh \
-  && sed -i 's/rsync $PYTHON_PKGS/rsync python3-devel/' install-tweaked.sh \
-  && chmod +x ./install-tweaked.sh \
-  && ./install-tweaked.sh -c \
-  && /bin/bash -c "source cloudshell/bin/activate && python3 -m compileall -f /opt/batch-shipyard/shipyard.py /opt/batch-shipyard/convoy && deactivate" \
-  && ln -sf /opt/batch-shipyard/shipyard /usr/local/bin/shipyard
-
-# # BEGIN: Install Ansible in isolated Virtual Environment
-COPY ./linux/ansible/ansible*  /usr/local/bin/
-RUN chmod 755 /usr/local/bin/ansible* \
-  && pip3 install virtualenv \
-  && cd /opt \
-  && virtualenv -p python3 ansible \
-  && /bin/bash -c "source ansible/bin/activate && pip3 install ansible && pip3 install pywinrm\>\=0\.2\.2 && deactivate" \
-  && ansible-galaxy collection install azure.azcollection -p /usr/share/ansible/collections
-
-# Install latest version of Istio
-ENV ISTIO_ROOT /usr/local/istio-latest
-RUN curl -sSL https://git.io/getLatestIstio | sh - \
-  && mv $PWD/istio* $ISTIO_ROOT \
-  && chmod -R 755 $ISTIO_ROOT
-ENV PATH $PATH:$ISTIO_ROOT/bin
-
-# Install latest version of Linkerd
-RUN export INSTALLROOT=/usr/local/linkerd \
-  && mkdir -p $INSTALLROOT \
-  && curl -sSL https://run.linkerd.io/install | sh - 
-ENV PATH $PATH:/usr/local/linkerd/bin
-
-ENV GOROOT="/usr/lib/golang"
-ENV PATH="$PATH:$GOROOT/bin:/opt/mssql-tools/bin"
+# # Install azure-functions-core-tools
+# RUN wget -nv -O Azure.Functions.Cli.linux-x64.4.0.3971.zip https://github.com/Azure/azure-functions-core-tools/releases/download/4.0.3971/Azure.Functions.Cli.linux-x64.4.0.3971.zip \
+#   && unzip -d azure-functions-cli Azure.Functions.Cli.linux-x64.4.0.3971.zip \
+#   && chmod +x azure-functions-cli/func \
+#   && chmod +x azure-functions-cli/gozip \
+#   && mv azure-functions-cli /opt \
+#   && ln -sf /opt/azure-functions-cli/func /usr/bin/func \
+#   && ln -sf /opt/azure-functions-cli/gozip /usr/bin/gozip \
+#   && rm -r Azure.Functions.Cli.linux-x64.4.0.3971.zip
 
 
-RUN gem install bundler --version 1.16.4 --force \
-  && gem install rake --version 12.3.0 --no-document --force \
-  && gem install colorize --version 0.8.1 --no-document --force \
-  && gem install rspec --version 3.7.0 --no-document --force
+# # Setup locale to en_US.utf8
+# RUN echo en_US UTF-8 >> /etc/locale.conf && locale-gen.sh
+# ENV LANG="en_US.utf8"
 
-ENV GEM_HOME=~/bundle
-ENV BUNDLE_PATH=~/bundle
-ENV PATH=$PATH:$GEM_HOME/bin:$BUNDLE_PATH/gems/bin
+# # Update pip and Install Service Fabric CLI
+# # Install mssql-scripter
+# RUN pip3 install --upgrade sfctl \
+#   && pip3 install --upgrade mssql-scripter
 
-# PowerShell telemetry
-ENV POWERSHELL_DISTRIBUTION_CHANNEL CloudShell
-# don't tell users to upgrade, they can't
-ENV POWERSHELL_UPDATECHECK Off
+# # Install Blobxfer and Batch-Shipyard in isolated virtualenvs
+# COPY ./linux/blobxfer /usr/local/bin
+# RUN chmod 755 /usr/local/bin/blobxfer \
+#   && pip3 install virtualenv \
+#   && cd /opt \
+#   && virtualenv -p python3 blobxfer \
+#   && /bin/bash -c "source blobxfer/bin/activate && pip3 install blobxfer && deactivate"
 
-# Install Azure draft
-RUN curl -fsSL https://raw.githubusercontent.com/Azure/draft/main/scripts/install.sh | bash
+# # Mariner distro required patch
+# # mariner-batch-shipyard.patch
+# # python3 is default in CBL-Mariner
+# # Some hacks to install.sh install-tweaked.sh
+# RUN curl -fSsL `curl -fSsL https://api.github.com/repos/Azure/batch-shipyard/releases/latest | grep tarball_url | cut -d'"' -f4` | tar -zxvpf - \
+#   && mkdir /opt/batch-shipyard \
+#   && mv Azure-batch-shipyard-*/* /opt/batch-shipyard \
+#   && rm -r Azure-batch-shipyard-* \
+#   && cd /opt/batch-shipyard \
+#   && sed 's/rhel/mariner/' < install.sh > install-tweaked.sh \
+#   && sed -i '/$PYTHON == /s/".*"/"python3"/' install-tweaked.sh \
+#   && sed -i 's/rsync $PYTHON_PKGS/rsync python3-devel/' install-tweaked.sh \
+#   && chmod +x ./install-tweaked.sh \
+#   && ./install-tweaked.sh -c \
+#   && /bin/bash -c "source cloudshell/bin/activate && python3 -m compileall -f /opt/batch-shipyard/shipyard.py /opt/batch-shipyard/convoy && deactivate" \
+#   && ln -sf /opt/batch-shipyard/shipyard /usr/local/bin/shipyard
 
-# Install Yeoman Generator and predefined templates
-RUN npm install -g yo \
-  && npm install -g generator-az-terra-module
+# # # BEGIN: Install Ansible in isolated Virtual Environment
+# COPY ./linux/ansible/ansible*  /usr/local/bin/
+# RUN chmod 755 /usr/local/bin/ansible* \
+#   && pip3 install virtualenv \
+#   && cd /opt \
+#   && virtualenv -p python3 ansible \
+#   && /bin/bash -c "source ansible/bin/activate && pip3 install ansible && pip3 install pywinrm\>\=0\.2\.2 && deactivate" \
+#   && ansible-galaxy collection install azure.azcollection -p /usr/share/ansible/collections
+
+# # Install latest version of Istio
+# ENV ISTIO_ROOT /usr/local/istio-latest
+# RUN curl -sSL https://git.io/getLatestIstio | sh - \
+#   && mv $PWD/istio* $ISTIO_ROOT \
+#   && chmod -R 755 $ISTIO_ROOT
+# ENV PATH $PATH:$ISTIO_ROOT/bin
+
+# # Install latest version of Linkerd
+# RUN export INSTALLROOT=/usr/local/linkerd \
+#   && mkdir -p $INSTALLROOT \
+#   && curl -sSL https://run.linkerd.io/install | sh - 
+# ENV PATH $PATH:/usr/local/linkerd/bin
+
+# ENV GOROOT="/usr/lib/golang"
+# ENV PATH="$PATH:$GOROOT/bin:/opt/mssql-tools/bin"
 
 
-# Copy and run script to Install powershell modules
-COPY ./linux/powershell/ powershell
-RUN /usr/bin/pwsh -File ./powershell/setupPowerShell.ps1 -image Base && rm -rf ./powershell
+# RUN gem install bundler --version 1.16.4 --force \
+#   && gem install rake --version 12.3.0 --no-document --force \
+#   && gem install colorize --version 0.8.1 --no-document --force \
+#   && gem install rspec --version 3.7.0 --no-document --force
+
+# ENV GEM_HOME=~/bundle
+# ENV BUNDLE_PATH=~/bundle
+# ENV PATH=$PATH:$GEM_HOME/bin:$BUNDLE_PATH/gems/bin
+
+# # PowerShell telemetry
+# ENV POWERSHELL_DISTRIBUTION_CHANNEL CloudShell
+# # don't tell users to upgrade, they can't
+# ENV POWERSHELL_UPDATECHECK Off
+
+# # Install Azure draft
+# RUN curl -fsSL https://raw.githubusercontent.com/Azure/draft/main/scripts/install.sh | bash
+
+# # Install Yeoman Generator and predefined templates
+# RUN npm install -g yo \
+#   && npm install -g generator-az-terra-module
+
+
+# # Copy and run script to Install powershell modules
+# COPY ./linux/powershell/ powershell
+# RUN /usr/bin/pwsh -File ./powershell/setupPowerShell.ps1 -image Base && rm -rf ./powershell
