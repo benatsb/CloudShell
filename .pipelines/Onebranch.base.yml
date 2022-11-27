@@ -71,8 +71,8 @@ extends:
             displayName: 'Base image'
             inputs:
               repositoryName: azure/cloudshell
-              dockerFileRelPath: drop/linux/base.Dockerfile
-              dockerFileContextPath: drop/linux
+              dockerFileRelPath: linux/base.Dockerfile
+              dockerFileContextPath: /
               registry: cdpxlinux.azurecr.io
               ameregistry: cdpxlinuxame.azurecr.io
               build_tag: '$(Build.BuildNumber)'
