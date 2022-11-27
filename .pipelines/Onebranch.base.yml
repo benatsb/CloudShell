@@ -16,10 +16,6 @@ variables:
   OUTPUTROOT: $(REPOROOT)\out
   NUGET_XMLDOC_MODE: none
   CDP_DEFINITION_BUILD_COUNT_DAY: $[counter(format('{0:yyyyMMdd}', pipeline.startTime), 1)]
-
-  DisableDockerDetector: true
-  WindowsContainerImage: 'cdpxwin1809.azurecr.io/global/vse2019:latest' # Docker image which is used to build the project https://aka.ms/obpipelines/containers
-#  WindowsContainerImage: 'cdpxwin1809.azurecr.io/global/vse2017:latest' 
   LinuxContainerImage: 'cdpxlinux.azurecr.io/global/ubuntu-1804-all:4.0'
 
 resources:
@@ -35,16 +31,13 @@ extends:
     globalSdl: # https://aka.ms/obpipelines/sdl
       tsa:
         enabled: false # onebranch publish all sdl results to TSA. If TSA is disabled all SDL tools will forced into 'break' build mode.
-      # credscan:
-      #   suppressionsFile: $(Build.SourcesDirectory)\.config\CredScanSuppressions.json
       binskim:
         break: false # always break the build on binskim issues in addition to TSA upload
       policheck:
         break: false # always break the build on policheck issues. You can disable it by setting to 'false'
-#       baseline:
-#         baselineFile: $(Build.SourcesDirectory)\.gdn\.gdnbaselines
       cg:
         failOnAlert: false  
+        
     stages:
     - stage: docker
       jobs:
@@ -55,7 +48,6 @@ extends:
           type: docker
           os: linux
         steps:
-
           - task: onebranch.pipeline.imagebuildinfo@1
             displayName: 'Base image'
             inputs:
