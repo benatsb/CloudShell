@@ -75,7 +75,7 @@ extends:
               dockerFileContextPath: /
               registry: cdpxlinux.azurecr.io
               ameregistry: cdpxlinuxame.azurecr.io
-              build_tag: '$(Build.BuildNumber)'
+              build_tag: 'base.$(Build.BuildNumber)'
               compression: true
               enable_isolated_acr_push: true
               enable_service_tree_acr_path: true
