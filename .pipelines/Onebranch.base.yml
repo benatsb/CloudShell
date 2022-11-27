@@ -66,11 +66,6 @@ extends:
           type: docker
           os: linux
         steps:
-          - task: DownloadPipelineArtifact@2
-            displayName: 'Download Artifacts'
-            inputs:
-              artifact: 'drop linux_phase'
-              targetPath: '$(Build.SourcesDirectory)/dst/drop' 
 
           - task: onebranch.pipeline.imagebuildinfo@1
             displayName: 'Base image'
