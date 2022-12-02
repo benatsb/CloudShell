@@ -12,7 +12,9 @@ FROM ${IMAGE_LOCATION}
 
 ENV NODE_OPTIONS=--tls-cipher-list='ECDHE-RSA-AES128-GCM-SHA256:!RC4'
 
+RUN tdnf clean all
 RUN tdnf repolist --refresh
+RUN tdnf update -y
 
 # Install latest Azure CLI package. CLI team drops latest (pre-release) package here prior to public release
 # We don't support using this location elsewhere - it may be removed or updated without notice
