@@ -9,6 +9,8 @@ ARG IMAGE_LOCATION=cdpxb787066ec88f4e20ae65e42a858c42ca00.azurecr.io/official/az
 # Copy from base build
 FROM ${IMAGE_LOCATION}
 
+RUN tdnf remove msodbcsql17 -y
+
 RUN tdnf clean all
 RUN tdnf repolist --refresh
 RUN tdnf update -y
