@@ -4,16 +4,16 @@
 
 # To build yourself locally, override this location with a local image tag. See README.md for more detail
 
-ARG IMAGE_LOCATION=cdpxb787066ec88f4e20ae65e42a858c42ca00.azurecr.io/official/azure/cloudshell:1.0.20221130.1.base.master.f5906848
-
+#ARG IMAGE_LOCATION=cdpxb787066ec88f4e20ae65e42a858c42ca00.azurecr.io/official/azure/cloudshell:1.0.20221130.1.base.master.f5906848
+ARG IMAGE_LOCATION=mcr.microsoft.com/cbl-mariner/base/core:2.0
 # Copy from base build
 FROM ${IMAGE_LOCATION}
-
+RUN echo "Hello"
 #RUN tdnf remove msodbcsql17 -y
 
-RUN tdnf clean all
-RUN tdnf repolist --refresh
-RUN ACCEPT_EULA=Y tdnf update -y
+# RUN tdnf clean all
+# RUN tdnf repolist --refresh
+# RUN ACCEPT_EULA=Y tdnf update -y
 
 # # Install latest Azure CLI package. CLI team drops latest (pre-release) package here prior to public release
 # # We don't support using this location elsewhere - it may be removed or updated without notice
