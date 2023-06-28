@@ -133,7 +133,13 @@ try {
         Install-AzAndAzAdModules
         
         # Install modules from PSGallery
-        Write-Output "Installing modules from production gallery"    
+        Write-Output "Installing modules from production gallery"
+
+        PowerShellGet\Install-Module -Name PowerShellGet @prodAllUsers   
+        PowerShellGet\Install-Module -Name AzureADPreview @prodAllUsers   
+        PowerShellGet\Install-Module -Name MSAL.PS @prodAllUsers   
+        PowerShellGet\Install-Module -Name Microsoft.Graph @prodAllUsers   
+        PowerShellGet\Install-Module -Name MicrosoftTeams @prodAllUsers   
         PowerShellGet\Install-Module -Name AzurePSDrive @prodAllUsers   
         PowerShellGet\Install-Module -Name GuestConfiguration -MaximumVersion $script:dockerfileDataObject.GuestConfigurationMaxVersion -ErrorAction SilentlyContinue @prodAllUsers
         PowerShellGet\Install-Module -Name Microsoft.PowerShell.UnixCompleters @prodAllUsers

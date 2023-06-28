@@ -12,6 +12,12 @@ Start a PowerShell process to load the modules and then exit.
 
 # AzurePSDrive requires Azure authentication so it cannot be preloaded.
 $moduleList = @(
+    "PowerShellGet",
+    "AzureADPreview",
+    "ExchangeOnlineManagement",
+    "MSAL.PS",
+    "Microsoft.Graph",
+    "MicrosoftTeams",
     "Microsoft.PowerShell.Management",
     "PSCloudShellUtility",
     "SHiPS",

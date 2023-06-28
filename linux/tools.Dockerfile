@@ -45,6 +45,15 @@ RUN curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep
 RUN wget -nv -q https://raw.githubusercontent.com/ansible-collections/azure/dev/requirements-azure.txt \
     && /opt/ansible/bin/python -m pip install -r /usr/share/ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt
 
+# Install oh-my-posh
+RUN curl -s https://ohmyposh.dev/install.sh | bash -s \
+  && chmod +x /usr/local/bin/oh-my-posh \
+  && install -Dv /dev/null /root/.config/powershell/Microsoft.PowerShell_profile.ps1 \
+  && echo "oh-my-posh init pwsh | Invoke-Expression" >> /root/.config/powershell/Microsoft.PowerShell_profile.ps1
+#/opt/microsoft/powershell/7/profile.ps1
+# Install oh-my-posh font
+#RUN oh-my-posh font install NerdFontsSymbolsOnly
+
 # Copy and run script to Install powershell modules and setup Powershell machine profile
 COPY ./linux/powershell/PSCloudShellUtility/ /usr/local/share/powershell/Modules/PSCloudShellUtility/
 COPY ./linux/powershell/ powershell

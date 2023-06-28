@@ -225,7 +225,6 @@ ENV POWERSHELL_UPDATECHECK Off
 RUN npm install -g yo \
   && npm install -g generator-az-terra-module
 
-
 # Copy and run script to Install powershell modules
 COPY ./linux/powershell/ powershell
 RUN /usr/bin/pwsh -File ./powershell/setupPowerShell.ps1 -image Base && rm -rf ./powershell
